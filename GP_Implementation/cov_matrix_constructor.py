@@ -1,3 +1,5 @@
+# this is likely to be redundant
+
 '''
 Here we will call the kernel we have just written and try and turn 
 it into a full covariance matrix from which we can sample. At the 
