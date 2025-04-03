@@ -19,7 +19,7 @@ def plotter(x, y, z, u, v, w):
         x=x.flatten(), y=y.flatten(), z=z.flatten(),
         u=u.flatten(), v=v.flatten(), w=w.flatten(),
         sizemode="scaled",
-        sizeref=2,  # Try adjusting this if cones are still not visible
+        sizeref=2,  
         anchor="tail"
     ))
 
