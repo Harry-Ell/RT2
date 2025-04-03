@@ -2,3 +2,6 @@
 *.pdf
 *.txt
 __pycache__
+
+# these are the names I give to files which i hope to delete
+_*
