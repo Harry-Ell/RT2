@@ -100,8 +100,9 @@ def sample_vector_field(grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarr
 def updated_vector_field(sampled_points_x: np.ndarray, sampled_points_y: np.ndarray, sampled_points_z: np.ndarray,
                          sampled_fields_x: np.ndarray, sampled_fields_y: np.ndarray, sampled_fields_z: np.ndarray,
                          grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarray,
-                         kernel_func: str, sigma_f: float = 1, l: float = 1, random_seed: int = 1, 
-                         noise:float = 1e-3):
+                         kernel_func: str, sigma_f = None, l = None, sigma_f_est = 0.1, l_est = 0.3,
+                         random_seed: int = 1, 
+                         noise:float = 1e-6):
     """
     Compute the GP-posterior vector field given noisy vector observations at a few points.
     returns a 3D vector field evaluated over the entire grid, conditioned on known field measurements.
@@ -111,9 +112,13 @@ def updated_vector_field(sampled_points_x: np.ndarray, sampled_points_y: np.ndar
 
     # Choose kernel
     function_chosen = divergence_free_kernel if kernel_func == 'divergence_free_kernel' else curl_free_kernel
-    sigma_f, l = aggregated_hyperparameter_optimisation(sampled_points_x, sampled_points_y, sampled_points_z,
+    if sigma_f is not None and l is not None: 
+        print('Parameters for sigma_f and l specified, using these.')
+    else:
+        print('Parameters for sigma_f and l not specified, optimising these via MLE now.')
+        sigma_f, l = aggregated_hyperparameter_optimisation(sampled_points_x, sampled_points_y, sampled_points_z,
                                 sampled_fields_x, sampled_fields_y, sampled_fields_z, kernel_func, 
-                                sigma_f, l, noise)
+                                sigma_f_est, l_est, noise)
     
     # this allows us to loop over these points
     points = np.vstack([grid_x.flatten(), grid_y.flatten(), grid_z.flatten()]).T               # (N, 3)
@@ -170,7 +175,7 @@ def updated_vector_field(sampled_points_x: np.ndarray, sampled_points_y: np.ndar
 
 def aggregated_hyperparameter_optimisation(sampled_points_x: np.ndarray, sampled_points_y: np.ndarray, sampled_points_z: np.ndarray,
                                 sampled_fields_x: np.ndarray, sampled_fields_y: np.ndarray, sampled_fields_z: np.ndarray, kernel_func: str, 
-                                sigma_f: float = 1, l: float = 1, noise:float = 1e-3)->list[float, float]:
+                                sigma_f: float = 1, l: float = 1, noise:float = 0.1)->list[float, float]:
     '''
     hyperparameter optimisation procedure for the case of tuning both sigma_f and the length scale. 
 
@@ -179,7 +184,7 @@ def aggregated_hyperparameter_optimisation(sampled_points_x: np.ndarray, sampled
     # wrapper function to call the other one. perhaps not even needed?
     if kernel_func == 'divergence_free_kernel':
         initial_guess = [sigma_f, l]
-        bounds = [(0.1, None), (0.1, None)]
+        bounds = [(0.001, None), (0.1, None)]
         # Optimize the objective
         result = minimize(
             _div_free_optimiser_wrapper, 
