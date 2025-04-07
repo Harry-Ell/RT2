@@ -2,12 +2,12 @@
 A current carrying wire will have a magnetic field around it. The wire will run parallel to the z
 axis, and be placed at the origin of the x,y plane. Current will be travelling in the direction of positive z.
 
-Direction of the current is dependent on the direction of travel. When it comes time to compare these outputs 
-to that of the GP, we can crank up the resolution of this and see if it can recreate the field.
+Direction of the current is dependent on the direction of travel. Follows a right hand rule. 
 '''
 
 import numpy as np 
 from constants import CONSTANTS
+
 def field_around_current_carrying_wire(I:float, 
                                        CONSTANTS:dict = CONSTANTS, 
                                        x_extent:list = [-0.5, 0.5], 
@@ -22,7 +22,7 @@ def field_around_current_carrying_wire(I:float,
         x_extent (list[int]): extent in the x direction of the final field. In SI Units, this will be meters.
         y_extent (list[int]): extent in the y direction of the final field. In SI Units, this will be meters.
         z_extent (list[int]): extent in the z direction of the final field. In SI Units, this will be meters.
-
+        resolution (int): side length of rectangular grid
     Returns:
         6 numpy nd arrays 
     '''
