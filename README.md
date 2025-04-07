@@ -1,5 +1,5 @@
 # Repository for RT2 
-
+Quite easily to quickly get started with this by skimming `vector_field_plottings/physical_fields.ipynb`, which contains plots of some vector fields of physical interest. Based off of these fields, in `vector_field_plottings/fitted_fields.ipynb` we draw samples of them and fit vector fields to them. Results are promising for divergence free kernel.  
 ## Repository Overview
 - `GP_Implementation` Contains the scripts which allow us to make the covariance matricies from constituent 3x3 matricies. These matricies are as found in Nikolas Walstroms PhD thesis. This includes functions for: 
     1. Drawing a random sample from a kernel which is either curl or divergence free. 

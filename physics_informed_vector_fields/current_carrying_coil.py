@@ -36,7 +36,8 @@ def field_around_current_carrying_coil(I:float,
     x, y, z = np.meshgrid(
         np.linspace(x_extent[0], x_extent[1], resolution),
         np.linspace(y_extent[0], y_extent[1], resolution),
-        np.linspace(z_extent[0], z_extent[1], resolution)
+        np.linspace(z_extent[0], z_extent[1], resolution), 
+        indexing = 'ij'
     )
     Bx, By, Bz = np.zeros_like(x), np.zeros_like(y), np.zeros_like(z)
 
