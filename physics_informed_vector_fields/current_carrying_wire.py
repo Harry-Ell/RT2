@@ -6,7 +6,7 @@ Direction of the current is dependent on the direction of travel. Follows a righ
 '''
 
 import numpy as np 
-from constants import CONSTANTS
+from physics_informed_vector_fields.constants import CONSTANTS
 
 def field_around_current_carrying_wire(I:float, 
                                        CONSTANTS:dict = CONSTANTS, 

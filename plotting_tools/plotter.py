@@ -14,7 +14,8 @@ the physics
 import numpy as np
 import plotly.graph_objects as go
 
-def plotter(x, y, z, u, v, w, title = 'Plot of Vector Fields'):
+def plotter(inputs, title = 'Plot of Vector Fields'):
+    x, y, z, u, v, w = inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5] 
     fig = go.Figure(data=go.Cone(
         x=x.flatten(), y=y.flatten(), z=z.flatten(),
         u=u.flatten(), v=v.flatten(), w=w.flatten(),

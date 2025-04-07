@@ -6,10 +6,12 @@ This is also a case for which the analytical solution is known exactly.
 
 Will be interesting for investigating the tail behaviour of the GPs fitted field. 
 '''
+
 import numpy as np 
-from constants import CONSTANTS
+from physics_informed_vector_fields.constants import CONSTANTS
+
 def field_around_infinite_solenoid(I:float, 
-                                   CONSTANTS:dict, 
+                                   CONSTANTS:dict = CONSTANTS, 
                                    x_extent:list = [-5, 5], 
                                    y_extent:list = [-5, 5],
                                    z_extent:list = [5,-5], 

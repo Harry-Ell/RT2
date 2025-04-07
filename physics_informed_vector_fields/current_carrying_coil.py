@@ -3,17 +3,19 @@ In the case of a circulating current, a magnetic field is formed inside of it. T
 We will place our coil in the centre of the x,y plane, with current circulating anticlockwise as you look at it down the z 
 axis. By the right hand rule, this will lead to a magnetic field which is aligned directly up the z axis. 
 '''
-from constants import CONSTANTS
-import numpy as np 
 
-def field_around_toroidal_current_carrying_wire(I:float, 
-                                                ring_radius:float = 0.5,
-                                                CONSTANTS:dict = CONSTANTS, 
-                                                x_extent:list = [-0.5, 0.5], 
-                                                y_extent:list = [-0.5, 0.5],
-                                                z_extent:list = [-0.5,0.5], 
-                                                resolution:float = 10, 
-                                                integral_discretisation:float = 1000) -> list[np.ndarray]:
+import numpy as np 
+from physics_informed_vector_fields.constants import CONSTANTS
+
+
+def field_around_current_carrying_coil(I:float, 
+                                       ring_radius:float = 0.5,
+                                       CONSTANTS:dict = CONSTANTS, 
+                                       x_extent:list = [-0.5, 0.5], 
+                                       y_extent:list = [-0.5, 0.5],
+                                       z_extent:list = [-0.5,0.5], 
+                                       resolution:float = 10, 
+                                       integral_discretisation:float = 1000) -> list[np.ndarray]:
     ''' 
     Args:
         I (float): Current which the wire is carrying.
