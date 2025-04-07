@@ -29,8 +29,8 @@ def field_around_current_carrying_wire(I:float,
     x, y, z = np.meshgrid(
         np.linspace(x_extent[0], x_extent[1], resolution),
         np.linspace(y_extent[0], y_extent[1], resolution),
-        np.linspace(z_extent[0], z_extent[1], resolution)
-    )
+        np.linspace(z_extent[0], z_extent[1], resolution),
+        indexing = 'ij')
 
     r = np.sqrt(x**2 + y**2) + 1e-3  # avoid div by zero
     theta = np.arctan2(y, x)
