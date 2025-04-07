@@ -59,8 +59,7 @@ def divergence_free_kernel_derivative_wrt_l(x1:np.array, x2:np.array, sigma_f:fl
 
 
 
-def sample_vector_field(grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarray,
-                        kernel_func:str, sigma_f: float = 1, l: float = 1, random_seed: int = 1)->np.ndarray:
+def sample_vector_field(kernel_func:str, sigma_f: float = 1, l: float = 1, random_seed: int = 1)->np.ndarray:
     """
     Given 3D meshgrid arrays, build the full cov matrix for a vector field 
     using the inputted kernel function.
@@ -68,6 +67,12 @@ def sample_vector_field(grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarr
     Returns the grid x,y,z and the sampled field components U,V,W shaped as the grid, 
     just so you can drop it straight into the plotter code.
     """
+    grid_x, grid_y, grid_z = np.meshgrid(
+    np.linspace(-0.5, 0.5, 10),
+    np.linspace(-0.5, 0.5, 10),
+    np.linspace(-0.5, 0.5, 10)
+    )
+    
     np.random.seed(random_seed)
     # some hacky logic 
     function_chosen = divergence_free_kernel if kernel_func == 'divergence_free_kernel' else curl_free_kernel
@@ -97,8 +102,7 @@ def sample_vector_field(grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarr
     return grid_x, grid_y, grid_z, U, V, W
 
 
-def updated_vector_field(sampled_points_x: np.ndarray, sampled_points_y: np.ndarray, sampled_points_z: np.ndarray,
-                         sampled_fields_x: np.ndarray, sampled_fields_y: np.ndarray, sampled_fields_z: np.ndarray,
+def updated_vector_field(inputs:list[np.ndarray],
                          grid_x: np.ndarray, grid_y: np.ndarray, grid_z: np.ndarray,
                          kernel_func: str, sigma_f = None, l = None, sigma_f_est = 0.1, l_est = 0.3,
                          random_seed: int = 1, 
@@ -107,7 +111,8 @@ def updated_vector_field(sampled_points_x: np.ndarray, sampled_points_y: np.ndar
     Compute the GP-posterior vector field given noisy vector observations at a few points.
     returns a 3D vector field evaluated over the entire grid, conditioned on known field measurements.
     """
-
+    sampled_points_x, sampled_points_y, sampled_points_z = inputs[0], inputs[1], inputs[2]
+    sampled_fields_x, sampled_fields_y, sampled_fields_z = inputs[3], inputs[4], inputs[5]
     np.random.seed(random_seed)
 
     # Choose kernel
