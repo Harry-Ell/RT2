@@ -8,7 +8,7 @@ import numpy as np
 from scipy.optimize import minimize
 
 
-def curl_free_kernel(x1: np.ndarray, x2: np.ndarray, sigma_f: float = 1, l: float = 1) -> np.ndarray:
+def curl_free_kernel(x1: np.array, x2: np.array, sigma_f: float = 1, l: float = 1) -> np.ndarray:
     """
     Divergence-free kernel based on a squared-exponential base.
     returns a 3x3 covariance matrix for vector-valued outputs in R^3.
