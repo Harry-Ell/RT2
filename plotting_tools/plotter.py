@@ -16,22 +16,67 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 
 
-def plotter(inputs, title = 'Plot of Vector Fields'):
-    x, y, z, u, v, w = inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5] 
+def plotter(inputs, title='Plot of Vector Fields', rescale = False, perspective=[1.3, 1.3, 1.3], save_as = None):
+    import numpy as np
+    import plotly.graph_objects as go
+
+    # Unpack and stride
+    x, y, z, u, v, w = inputs
+
+
+    # Compute magnitude
+    mags = np.sqrt(u**2 + v**2 + w**2)
+
+    # Avoid division by zero
+    mags = np.where(mags == 0, 1e-8, mags)
+    if rescale == True:
+        # Choose your nonlinear scaling
+        # E.g. take square root to reduce contrast
+        scale_factor = np.sqrt(mags) / mags  # Now all vectors get a shorter length
+        # Or use np.log1p(mags) / mags for log-scaling
+
+        # Rescale vectors
+        u = u * scale_factor
+        v = v * scale_factor
+        w = w * scale_factor
+
     fig = go.Figure(data=go.Cone(
-        x=x.flatten(), y=y.flatten(), z=z.flatten(),
-        u=u.flatten(), v=v.flatten(), w=w.flatten(),
+        x=x.flatten(),
+        y=y.flatten(),
+        z=z.flatten(),
+        u=u.flatten(),
+        v=v.flatten(),
+        w=w.flatten(),
+        # colorscale='Plasma',
+        cmin=0,
         sizemode="scaled",
         sizeref=2,  
-        anchor="tail"
+        anchor="tail",
+        colorbar=dict(
+            x=0.62,         # default is ~1.0, move left to get closer to the plot
+            len=0.75,       # shrink the vertical size a bit if needed
+            thickness=15,   # optional: make it slimmer
+        ),
     ))
 
-    fig.update_layout(title = title, 
+    fig.update_layout(
+        title=dict(text=title,
+                   x=0.5,
+                   y=0.75,
+                   xanchor='center',
+                   font=dict(size=20)
+                ),
         scene=dict(
-        xaxis_title='X', yaxis_title='Y', zaxis_title='Z', 
-    ))
-
+            xaxis=dict(title='X', showbackground=False),
+            yaxis=dict(title='Y', showbackground=False),
+            zaxis=dict(title='Z', showbackground=False)
+        ),
+        scene_camera=dict(eye=dict(x=perspective[0], y=perspective[1], z=perspective[2]))
+    )
+    if save_as:
+        fig.write_image(save_as)
     fig.show()
+
 
 def cross_section_plotter(inputs, plane='z', title='Cross-Section of Vector Field'):
     """
