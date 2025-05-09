@@ -1,5 +1,5 @@
 # Repository for RT2 
-Quite easily to quickly get started with this by skimming `vector_field_plottings/physical_fields.ipynb`, which contains plots of some vector fields of physical interest. Based off of these fields, in `vector_field_plottings/fitted_fields.ipynb` we draw samples of them and fit vector fields to them. Results are promising for divergence free kernel.  
+Quite easily to quickly get started with this by skimming `vector_field_plottings/physical_fields.ipynb`, which contains plots of some vector fields of physical interest. Based off of these fields, in `vector_field_plottings/fitted_[EXAMPLE].ipynb` we draw samples of them and fit vector fields to them. Results are promising for divergence free kernel.  
 ## Repository Overview
 - `GP_Implementation` Contains the scripts which allow us to make the covariance matricies from constituent 3x3 matricies. These matricies are as found in Nikolas Walstroms PhD thesis. This includes functions for: 
     1. Drawing a random sample from a kernel which is either curl or divergence free. 
@@ -17,5 +17,5 @@ Quite easily to quickly get started with this by skimming `vector_field_plotting
     1. `plotter_dev_steps.ipynb` Playing around with and testing functionality of the script at `plotting_tools/plotter.py`. Mostly Now redundant.
     2. `Physical_fields.ipynb` Examples of the vector fields which we are aiming to plot. 
     3. `kernel_samples.ipynb` Playing around with kernel parameters to invesigate sensitivity to params. 
-    4. `fitted_fields.ipynb`Our updated fields fitted using GP regression.
+    4. `fitted_fields.ipynb` Our updated fields fitted using GP regression.
 - `tests` (EMPTY) Need to add in some of these shortly

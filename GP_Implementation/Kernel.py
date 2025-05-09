@@ -10,7 +10,7 @@ from scipy.optimize import minimize
 
 def curl_free_kernel(x1: np.array, x2: np.array, sigma_f: float = 1, l: float = 1) -> np.ndarray:
     """
-    Divergence-free kernel based on a squared-exponential base.
+    curl-free kernel based on a squared-exponential base.
     returns a 3x3 covariance matrix for vector-valued outputs in R^3.
     
     formula 2.44
@@ -22,14 +22,20 @@ def curl_free_kernel(x1: np.array, x2: np.array, sigma_f: float = 1, l: float = 
     return K
 
 
-
 def divergence_free_kernel(x1:np.array, x2:np.array, sigma_f:float =1, l:float=1)->np.ndarray:
     '''
-    Should be a divergence and curl free vector field which you get from here. There surely arent that 
+    Should be a divergence free vector field which you get from here. There surely arent that 
     many of these, so this will hopefully quickly look like a magnetic field. 
 
     formula 2.48
     '''
+    
+    # if np.any((np.sqrt(x1[0]**2+x1[1]**2) < 0.2) and (np.sqrt(x2[0]**2+x2[1]**2) < 0.2)):
+    #     l = 0.2
+    # elif (np.sqrt(x1[0]**2+x1[1]**2) < 0.2) or (np.sqrt(x2[0]**2+x2[1]**2) < 0.2):
+    #     return np.zeros((3,3))
+    # else:
+    #     l = 1
     diff = x1 - x2
     # def some distance measure
     r2 = np.dot(diff, diff)
@@ -57,6 +63,21 @@ def divergence_free_kernel_derivative_wrt_l(x1:np.array, x2:np.array, sigma_f:fl
     K = (scaling1 * (term1 + term2) + scaling2 * (term3 + term4)) * scaling
     return K 
 
+
+def divergence_free_matern_kernel(x1:np.array, x2:np.array, sigma_f:float =1, l:float=1)->np.ndarray:
+    '''
+    Should be a divergence and curl free vector field which you get from here. There surely arent that 
+    many of these, so this will hopefully quickly look like a magnetic field. 
+
+    formula 2.48
+    '''
+    
+    diff = x1 - x2
+    # def some distance measure
+    r = np.sqrt(np.dot(diff, diff)) + 1e-8
+    scaling = (sigma_f / l)**2 * np.exp(-r/l)
+    matrix_expression = np.eye(3) - (1+l/r)*np.outer(diff, diff) / r**2
+    return scaling * matrix_expression
 
 
 def sample_vector_field(kernel_func:str, sigma_f: float = 1, l: float = 1, random_seed: int = 1)->np.ndarray:
@@ -116,7 +137,16 @@ def updated_vector_field(inputs:list[np.ndarray],
     np.random.seed(random_seed)
 
     # Choose kernel
-    function_chosen = divergence_free_kernel if kernel_func == 'divergence_free_kernel' else curl_free_kernel
+    if kernel_func == 'divergence_free_kernel':
+        function_chosen = divergence_free_kernel  
+    elif kernel_func == 'curl_free_kernel':
+        function_chosen = curl_free_kernel
+    elif kernel_func == 'divergence_free_matern_kernel':
+        function_chosen = divergence_free_matern_kernel
+    else:
+        raise ValueError("specified kernel does not match any of the options")
+    
+    
     if sigma_f is not None and l is not None: 
         print('Parameters for sigma_f and l specified, using these.')
     else:
@@ -167,10 +197,10 @@ def updated_vector_field(inputs:list[np.ndarray],
     K_x_x = K_x_x + noise * np.eye(M * D)
     posterior_mean = K_xstar_x @ np.linalg.solve(K_x_x, y)
     posterior_covar = K_xstar_xstar - K_xstar_x @ np.linalg.solve(K_x_x, K_xstar_x.T)
-    sample = np.random.multivariate_normal(posterior_mean, posterior_covar)
+    # sample = np.random.multivariate_normal(posterior_mean, posterior_covar)
 
     # Reshape into 3D vector field
-    field_vectors = sample.reshape(N, D)
+    field_vectors = posterior_mean.reshape(N, D)
     U = field_vectors[:, 0].reshape(grid_x.shape)
     V = field_vectors[:, 1].reshape(grid_y.shape)
     W = field_vectors[:, 2].reshape(grid_z.shape)
