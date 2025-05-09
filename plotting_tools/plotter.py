@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 
 
-def plotter(inputs, title='Plot of Vector Fields', rescale = False, perspective=[1.3, 1.3, 1.3], save_as = None):
+def plotter(inputs, title='Plot of Vector Fields', rescale = False, perspective=[1.3, 1.3, 1.3], save_as = None, write_html = False, html_name = None):
     import numpy as np
     import plotly.graph_objects as go
 
@@ -67,14 +67,9 @@ def plotter(inputs, title='Plot of Vector Fields', rescale = False, perspective=
                    font=dict(size=20)
                 ),
         scene=dict(
-            xaxis=dict(title='X', showbackground=False),
-            yaxis=dict(title='Y', showbackground=False),
-            zaxis=dict(title='Z', showbackground=False)
-        ),
-        scene_camera=dict(eye=dict(x=perspective[0], y=perspective[1], z=perspective[2]))
-    )
-    if save_as:
-        fig.write_image(save_as)
+        xaxis_title='X', yaxis_title='Y', zaxis_title='Z', 
+    ))
+
     fig.show()
 
 

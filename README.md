@@ -18,4 +18,5 @@ Quite easily to quickly get started with this by skimming `vector_field_plotting
     2. `Physical_fields.ipynb` Examples of the vector fields which we are aiming to plot. 
     3. `kernel_samples.ipynb` Playing around with kernel parameters to invesigate sensitivity to params. 
     4. `fitted_fields.ipynb` Our updated fields fitted using GP regression.
-- `tests` (EMPTY) Need to add in some of these shortly
+
+
