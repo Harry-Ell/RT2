@@ -48,7 +48,7 @@ def field_around_magnetic_diplole(m:float,
     v = prefactor * (y*term1)
     w = prefactor * (z*term1 - term2)
     # to make it so we can actually see things on the plots
-    masking = 0.05 
+
     mask = r < masking
 
     
