@@ -2,6 +2,6 @@
 *.pdf
 *.txt
 __pycache__
-
+tuning_non_stationarity.ipynb
 # these are the names I give to files which i hope to delete
 _*
