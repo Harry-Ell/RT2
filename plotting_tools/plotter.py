@@ -67,9 +67,16 @@ def plotter(inputs, title='Plot of Vector Fields', rescale = False, perspective=
                    font=dict(size=20)
                 ),
         scene=dict(
-        xaxis_title='X', yaxis_title='Y', zaxis_title='Z', 
-    ))
-
+            xaxis=dict(title='X', showbackground=False),
+            yaxis=dict(title='Y', showbackground=False),
+            zaxis=dict(title='Z', showbackground=False)
+        ),
+        scene_camera=dict(eye=dict(x=perspective[0], y=perspective[1], z=perspective[2]))
+    )
+    if save_as:
+        fig.write_image(save_as)
+    if write_html:
+        fig.write_html(html_name)
     fig.show()
 
 
